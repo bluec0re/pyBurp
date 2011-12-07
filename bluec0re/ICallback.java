@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import burp.*;
 
-public interface ICallback
+public abstract class ICallback
 {
     /**
      * This method is invoked immediately after the implementation's constructor
@@ -14,7 +14,7 @@ public interface ICallback
      *
      * @param args The command-line arguments passed to Burp Suite on startup.
      */
-    public void setCommandLineArgs(String[] args);
+    public abstract void setCommandLineArgs(String[] args);
     
     /**
      * This method is invoked by Burp Proxy whenever a client request or server
@@ -48,7 +48,7 @@ public interface ICallback
      * in the <code>message</code> paramater, or (b) a different object 
      * containing a modified message.
      */
-    public byte[] processProxyMessage(
+    public abstract byte[] processProxyMessage(
             int messageReference,
             boolean messageIsRequest,
             String remoteHost,
@@ -109,14 +109,14 @@ public interface ICallback
      * @param callbacks An implementation of the 
      * <code>IBurpExtenderCallbacks</code> interface.
      */
-    public void registerExtenderCallbacks(burp.IBurpExtenderCallbacks callbacks);
+    public abstract void registerExtenderCallbacks(burp.IBurpExtenderCallbacks callbacks);
     
     /**
      * This method is invoked immediately before Burp Suite exits. 
      * It allows implementations to carry out any clean-up actions necessary
      * (e.g. flushing log files or closing database resources).
      */
-    public void applicationClosing();
+    public abstract void applicationClosing();
     
     /**
      * This method is invoked whenever any of Burp's tools makes an HTTP request 
@@ -132,7 +132,7 @@ public interface ICallback
      * response.
      * @param messageInfo Details of the HTTP message.
      */
-    public void processHttpMessage(
+    public abstract void processHttpMessage(
             String toolName, 
             boolean messageIsRequest, 
             IHttpRequestResponse messageInfo);
@@ -143,5 +143,5 @@ public interface ICallback
      * 
      * @param issue Details of the new scan issue.
      */
-    public void newScanIssue(IScanIssue issue);
+    public abstract void newScanIssue(IScanIssue issue);
 }

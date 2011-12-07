@@ -65,8 +65,12 @@ public class BurpExtender implements IBurpExtender {
                         }
                         if (inputLine.equals(""))
                             continue;
-
-                        if(inputLine.equals("list")) {
+                        
+                        if(inputLine.equals("help")) {
+                            out.println("Commands:");
+                            out.println("help list add rm cd pwd quit");
+                        }
+                        else if(inputLine.equals("list")) {
                             out.println("Callback list:");
                             int i = 1;
                             for(ICallback cb : pyCallbacks) {
@@ -81,7 +85,7 @@ public class BurpExtender implements IBurpExtender {
                             try {
                                 ICallback ext = (ICallback) factory.createObject(
                                         ICallback.class, modulename);
-                                pyCallbacks.add(ext);
+                                BurpExtender.this.addCallback(ext);
                                 out.println("done");
                             } catch(Exception e) {
                                 out.println(e.toString());
@@ -96,7 +100,11 @@ public class BurpExtender implements IBurpExtender {
                                 out.println("done");
                             } catch(Exception e) {}
                         } else if (inputLine.startsWith("cd ")) {
-                            System.setProperty("user.dir", inputLine.substring(3));
+                            String cd = inputLine.substring(3);
+                            if (cd.charAt(0) == '/' || (cd.length() > 1 && cd.charAt(1) == ':'))
+                                System.setProperty("user.dir", cd);
+                            else
+                                System.setProperty("user.dir", System.getProperty("user.dir") + cd);
                         } else if (inputLine.equals("pwd")) {
                             out.println(System.getProperty("user.dir"));
                         } else {
@@ -112,11 +120,17 @@ public class BurpExtender implements IBurpExtender {
             }
         }
     }, "burp-server");
-
+    
     public BurpExtender() {
         pyCallbacks = new ArrayList<ICallback>();
         this.server.start();
         System.out.println("Burp Python loaded. CWD: " + System.getProperty("user.dir"));
+    }
+
+    public void addCallback(ICallback callback) {
+        callback.setCommandLineArgs(this.args);
+        callback.registerExtenderCallbacks(this.callbacks);
+        this.pyCallbacks.add(callback);
     }
 
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
