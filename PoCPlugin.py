@@ -14,10 +14,17 @@ class PocPlugin(ICallback):
         callbacks.registerMenuItem('Save PoC', Handler())
 
 class Handler(IMenuItemHandler):
+    def __init__(self, *args, **kwargs):
+        super(Handler, self).__init__(*args, **kwargs)
+        self.dir = None
+
     def menuItemClicked(self, menuItemCaption, messageInfo):
         if menuItemCaption == 'Save PoC':
 
-            fc = JFileChooser()
+            if self.dir:
+                fc = JFileChooser(self.dir)
+            else:
+                fc = JFileChooser()
 
             returnVal = fc.showSaveDialog(None)
 
@@ -55,3 +62,4 @@ class Handler(IMenuItemHandler):
                 JOptionPane.showMessageDialog(None, 
                             "File was successfully saved", "Ok",  
                             JOptionPane.INFORMATION_MESSAGE)
+                self.dir = fc.getCurrentDirectory()
