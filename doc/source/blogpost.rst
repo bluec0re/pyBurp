@@ -1,50 +1,52 @@
 Use Python for Burp plugins
 ---------------------------
-Burp has an inbuilt plugin functionality. Due to it is written in Java, the
-plugins also have to be written in Java. Additional there could be only one
-Plugin, which is only loaded at start-up. 
+Burp has an inbuilt plugin functionality. Because Burp is written in Java, it
+only supports Java classes as plugins. Additionaly, Burp allows only to use one
+plugin at the same time and it have to be loaded on start-up. 
 
-Now we have written a Burp-Python proxy which enables us to hotload and unload
-multiple plugins at a time.
+Now we have written a Burp-Python proxy which enables us to load and unload
+multiple plugins at runtime and written in Python.
 
 The only restriction is that we have to use Jython for compiling and
 interpreting the python scripts. Actually we have tested it with Jython 2.5.2.
-Other version might work, but it isn't guaranteed.
+Other versions might work, but it isn't guaranteed.
 
 
-To use this plugin, you have should follow these steps:
+To use this plugin, you should follow these steps:
 
-#. install jython (2.5.2)
+#. download and extract/install `jython <www.jython.org>`_ (2.5.2)
 #. update the paths in the *Makefile* for your Burp copy and jython.jar
+    #. run ``make`` (requires a jdk installed, you can also download a
+           precompiled jar from `here <http://www.ernw.de/download/burp_python.jar>`_
 #. update the paths in the *burp.sh* corresponding to 2.
 #. start Burp with *burp.sh*
-    * Burp should now told you on which port he waits for load and unload commands (eg. 55666)
+    * Burp should have told you on which port he waits for load and unload commands (eg. 55666)
 #. Load a Pythonplugin::
     
-    $ nc localhost 55666             # or some other port reported at startup
-    pwd                              # shows you the current workingdir to load from
-    /home/bluec0re
-    cd /home/bluec0re/sources/pyBurp # change the current workingdir
-    add PoCPlugin                    # load the PoC-Plugin
+    $ nc localhost 55666            # or some other port reported at startup
+    pwd                             # shows you the current workingdir to load from
+    /home/foo
+    cd /home/foo/sources/pyBurp     # change the current workingdir
+    add PoCPlugin                   # load the PoC-Plugin
     adding PoCPlugin
     done
-    list                             # show loaded Plugins
+    list                            # show loaded Plugins
     Callback list:
-    1: org.python.proxies.PoCPlugin$PocPlugin$1@432dbb4b
-    quit                             # quit communication
+    1: PocPlugin
+    quit                            # quit communication
     Bye
     $
 
 #. Remove a Pythonplugin::
 
-    $ nc localhost 55666             # or some other port reported at startup
-    list                             # show loaded Plugins
+    $ nc localhost 55666            # or some other port reported at startup
+    list                            # show loaded Plugins
     Callback list:
-    1: org.python.proxies.PoCPlugin$PocPlugin$1@432dbb4b
-    rm 1                             # remove Plugin with no. 1
-    removing org.python.proxies.PoCPlugin$PocPlugin$1@432dbb4b
+    1: PoCPlugin
+    rm 1                            # remove Plugin with no. 1
+    removing PoCPlugin
     done
-    quit                             # quit communication
+    quit                            # quit communication
     Bye
     $
 

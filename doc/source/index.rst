@@ -12,25 +12,7 @@ Contents:
    :maxdepth: 2
 
    blogpost.rst
-
-Examples
-========
-.. highlight:: python
-    :linenothreshold: 5
-
-Plugin for loading Burp state files from commandline:
-
-.. literalinclude:: ../../CmdlinePlugin.py
-
-Plugin for saving request/response items in a File (without the Burp-XML around it):
-
-.. literalinclude:: ../../PoCPlugin.py
-
-The Java class who have to be implemented by the Python scripts\:
-
-.. literalinclude:: ../../bluec0re/ICallback.java
-    :language: java
-
+   examples.rst
 
 Indices and tables
 ==================
