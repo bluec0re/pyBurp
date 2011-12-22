@@ -16,4 +16,5 @@ class CmdlinePlugin(ICallback):
             f = File(self.args[-1])
             if f.exists():
                 callbacks.restoreState(f)
-
+    def toString(self):
+        return 'CmdlinePlugin'

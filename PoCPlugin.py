@@ -13,6 +13,9 @@ class PocPlugin(ICallback):
     def registerExtenderCallbacks(self, callbacks):
         callbacks.registerMenuItem('Save PoC', Handler())
 
+    def toString(self):
+        return 'PoCPlugin'
+
 class Handler(IMenuItemHandler):
     def __init__(self, *args, **kwargs):
         super(Handler, self).__init__(*args, **kwargs)

@@ -4,6 +4,18 @@ import java.util.List;
 import java.util.Map;
 import burp.*;
 
+/*
+ * Based on:
+ *
+ * @(#)IBurpExtender.java
+ *
+ * Copyright PortSwigger Ltd. All rights reserved.
+ * 
+ * This code may be used to extend the functionality of Burp Suite and Burp
+ * Suite Professional, provided that this usage does not violate the 
+ * license terms for those products. 
+ */
+
 public abstract class ICallback
 {
     /**
