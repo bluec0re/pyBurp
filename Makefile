@@ -1,6 +1,8 @@
 JAVAC=javac
 JAR=jar
-CP=/home/bluec0re/Apps/burpsuite_pro_v1.4.05.jar:/opt/jython/jython.jar:. 
+JYTHON_PATH=
+BURP_PATH=
+CP="$(BURP_PATH)/burpsuite_pro_v1.4.05.jar:$(JYTHON_PATH)/jython.jar:."
 
 burp_python.jar: burp/BurpExtender.class bluec0re/ICallback.class bluec0re/JythonObjectFactory.class
 	$(JAR) cvf $@ bluec0re/*.class burp/*.class
