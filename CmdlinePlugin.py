@@ -27,14 +27,14 @@ class CmdlinePlugin(ICallback):
                 conf['scanner.activecustomscopetype'] = '0'
                 callbacks.loadConfig(conf)
                 print "Deactivate doAutoSave (%s -> false)" % (self.autosave,)
-                print "Deactivate active scanner (%d -> 0)" % (active_type,)
+                print "Deactivate active scanner (%s -> 0)" % (active_type,)
         if self.autosave is None:
             conf = callbacks.saveConfig()
             print "Activate doAutoSave (%s -> true)" % (conf['suite.doAutoSave'],)
             conf['suite.doAutoSave'] = 'true'
             active_type = conf['scanner.activecustomscopetype']
             conf['scanner.activecustomscopetype'] = '0'
-            print "Deactivate active scanner (%d -> 0)" % (active_type,)
+            print "Deactivate active scanner (%s -> 0)" % (active_type,)
             callbacks.loadConfig(conf)
 
 
