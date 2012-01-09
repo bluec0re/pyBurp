@@ -1,0 +1,65 @@
+<project>
+    <property name="jython.dir"  value=""/>
+    <property name="jython.jar"  value="${jython.dir}/jython.jar"/>
+    <property name="jython.lib"  value="${jython.dir}/Lib"/>
+    <property name="burp.version" value="1.4.05" />
+    <property name="burp.jar"    value="burpsuite_pro_v${burp.version}.jar"/>
+
+    <property name="main-class"  value="burp.StartBurp"/>
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+
+    <path id="classpath">
+        <pathelement location="${jython.jar}"/>
+        <pathelement location="${burp.jar}"/>
+    </path>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="src" destdir="${classes.dir}" classpathref="classpath" />
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/burp_python.jar" basedir="${classes.dir}"
+            excludes="Makefile" />
+    </target>
+
+    <target name="allinone" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <mkdir dir=".tmp" />
+        <unzip dest=".tmp" src="${jython.jar}" />
+        <copy todir=".tmp">
+            <fileset dir="${jython.lib}"/>
+            <fileset dir="${classes.dir}"/>
+        </copy>
+        <jar destfile="${jar.dir}/burp_python_allinone.jar" basedir=".tmp" />
+        <delete dir=".tmp" />
+    </target>
+    
+    <target name="standalone" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <mkdir dir=".tmp" />
+        <unzip dest=".tmp" src="${jython.jar}" />
+        <unzip dest=".tmp" src="${burp.jar}" />
+        <copy todir=".tmp">
+            <fileset dir="${jython.lib}"/>
+            <fileset dir="${classes.dir}"/>
+        </copy>
+        <jar destfile="${jar.dir}/burp_python_standalone_v${burp.version}.jar" basedir=".tmp">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+        <delete dir=".tmp" />
+    </target>
+
+
+</project>
