@@ -53,11 +53,6 @@ public class BurpExtender implements IBurpExtender {
                                                 clientSocket.getInputStream()));
                     String inputLine, outputLine;
 
-                    // initiate conversation with client
-                    // KnockKnockProtocol kkp = new KnockKnockProtocol();
-                    // outputLine = kkp.processInput(null);
-                    // out.println(outputLine);
-                    //
                     while ((inputLine = in.readLine()) != null) {   
                         if (inputLine.equals("quit")) {
                             out.println("Bye");
@@ -83,9 +78,11 @@ public class BurpExtender implements IBurpExtender {
                             String modulename = inputLine.substring(4);
                             out.println("adding " + modulename);
                             try {
-                                ICallback ext = (ICallback) factory.createObject(
+                                ArrayList<Object> list =  factory.createObject(
                                         ICallback.class, modulename);
-                                BurpExtender.this.addCallback(ext);
+                                for(Object o : list) {
+                                    BurpExtender.this.addCallback((ICallback)o);
+                                }
                                 out.println("done");
                             } catch(Exception e) {
                                 out.println(e.toString());

@@ -2,6 +2,7 @@ package bluec0re;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PyList;
@@ -37,12 +38,14 @@ public class JythonObjectFactory {
      * The createObject() method is responsible for the actual creation of the
      * Jython object into Java bytecode.
      */
-    public static Object createObject(Object interfaceType, String moduleName){
+    public static ArrayList<Object> createObject(Object interfaceType, String moduleName){
         Object javaInt = null;
         // Create a PythonInterpreter object and import our Jython module
         // to obtain a reference.
         PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
         PySystemState sys = interpreter.getSystemState();
+
+        // add the library paths to sys.path
         String home = System.getProperty("python.home");
         int idx = home != null ? home.indexOf(':') : -1;
         while(idx != -1) {
@@ -52,28 +55,37 @@ public class JythonObjectFactory {
         if (home != null && !"".equals(home)) {
             sys.path.append(new PyString(home));
         }
+
+        // append current working dir to sys.path
         sys.path.append(new PyString(System.getProperty("user.dir")));
+
+        // load modules
         interpreter.exec("import inspect\nfrom bluec0re import ICallback");
         interpreter.exec("import " + moduleName);
 
+        // get list of ICallback implementing classes
         PyList list = (PyList)interpreter.eval("[v for v in inspect.getmembers(" + moduleName + ", inspect.isclass) if issubclass(v[1], ICallback) and v[1] != ICallback]"); 
 
-        pyObject = ((PyTuple)list.pyget(0)).pyget(1);
+        ArrayList<Object> classes = new ArrayList<Object>();
 
-        try {
-            // Create a new object reference of the Jython module and
-            // store into PyObject.
-            PyObject newObj = pyObject.__call__();
-            // Call __tojava__ method on the new object along with the interface name
-            // to create the java bytecode
-            javaInt = newObj.__tojava__(Class.forName(interfaceType.toString().substring(
-                        interfaceType.toString().indexOf(" ")+1,
-                        interfaceType.toString().length())));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JythonObjectFactory.class.getName()).log(Level.SEVERE, null, ex);
+        for(int i = 0; i < list.__len__(); i++) {
+            pyObject = ((PyTuple)list.get(i)).pyget(1);
+            try {
+                // Create a new object reference of the Jython module and
+                // store into PyObject.
+                PyObject newObj = pyObject.__call__();
+                // Call __tojava__ method on the new object along with the interface name
+                // to create the java bytecode
+                javaInt = newObj.__tojava__(Class.forName(interfaceType.toString().substring(
+                            interfaceType.toString().indexOf(" ")+1,
+                            interfaceType.toString().length())));
+                classes.add(javaInt);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(JythonObjectFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        return javaInt;
+        return classes;
     }
 
 }
