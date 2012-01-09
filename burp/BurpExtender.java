@@ -136,6 +136,7 @@ public class BurpExtender implements IBurpExtender {
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
     {
         this.callbacks = callbacks;
+        callbacks.issueAlert("Listening for plugin commands on port " + this.port);
 //        callbacks.registerMenuItem("my menu item", new CustomMenuItem());
         for(ICallback cb : pyCallbacks) {
             cb.registerExtenderCallbacks(callbacks);
