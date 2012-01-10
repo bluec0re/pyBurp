@@ -81,6 +81,7 @@ public class BurpExtender implements IBurpExtender {
                                 ArrayList<Object> list =  factory.createObject(
                                         ICallback.class, modulename);
                                 for(Object o : list) {
+                                    System.out.println("Loaded " + o);
                                     BurpExtender.this.addCallback((ICallback)o);
                                 }
                                 out.println("done");
@@ -137,6 +138,20 @@ public class BurpExtender implements IBurpExtender {
 //        callbacks.registerMenuItem("my menu item", new CustomMenuItem());
         for(ICallback cb : pyCallbacks) {
             cb.registerExtenderCallbacks(callbacks);
+        }
+
+
+        System.out.println("Load autoload.py");
+        try {
+            ArrayList<Object> list =  factory.createObject(
+                    ICallback.class, "autoload");
+            for(Object o : list) {
+                System.out.println("Loaded " + o);
+                this.addCallback((ICallback)o);
+            }
+            System.out.println("done");
+        } catch(Exception e) {
+            System.out.println(e.toString());
         }
     }
 
@@ -219,32 +234,4 @@ public class BurpExtender implements IBurpExtender {
         BurpExtender b = new BurpExtender();
     }
 
-}
-
-
-class CustomMenuItem implements IMenuItemHandler
-{
-    public void menuItemClicked(String menuItemCaption, IHttpRequestResponse[] messageInfo)
-    {
-        try
-        {
-            System.out.println(menuItemCaption + " clicked");
-
-            for (int i = 0; i < messageInfo.length; i++)
-            {
-                System.out.println("message " + i);
-                System.out.println("host: " + messageInfo[i].getHost());
-                System.out.println("url: " + messageInfo[i].getUrl());
-
-                byte[] response = messageInfo[i].getResponse();
-                if (response != null)
-                    System.out.println("response: \n" + new String(response));
-                System.out.println("=============================\n");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

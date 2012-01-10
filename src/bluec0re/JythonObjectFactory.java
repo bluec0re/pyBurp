@@ -3,6 +3,8 @@ package bluec0re;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
+import java.net.URLDecoder;
+import java.io.File;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PyList;
@@ -34,6 +36,21 @@ public class JythonObjectFactory {
         return instance;
     }
 
+    private static String getJarPath() {
+        String path = JythonObjectFactory.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        try {
+            return URLDecoder.decode(path, "UTF-8");
+        } catch(java.io.UnsupportedEncodingException e) {
+            return "";
+        }
+    }
+
+    private static String getJarFolder() {
+        String path = getJarPath();
+        int idx = path.lastIndexOf(File.separatorChar);
+        return path.substring(0, idx);
+    }
+
     /**
      * The createObject() method is responsible for the actual creation of the
      * Jython object into Java bytecode.
@@ -55,6 +72,9 @@ public class JythonObjectFactory {
         if (home != null && !"".equals(home)) {
             sys.path.append(new PyString(home));
         }
+
+        // append jar location to sys.path
+        sys.path.append(new PyString(getJarFolder()));
 
         // append current working dir to sys.path
         sys.path.append(new PyString(System.getProperty("user.dir")));
