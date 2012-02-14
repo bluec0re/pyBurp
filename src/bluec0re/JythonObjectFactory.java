@@ -48,6 +48,8 @@ public class JythonObjectFactory {
     private static String getJarFolder() {
         String path = getJarPath();
         int idx = path.lastIndexOf(File.separatorChar);
+        if(idx == -1)
+            idx = path.lastIndexOf('/');
         return path.substring(0, idx);
     }
 
