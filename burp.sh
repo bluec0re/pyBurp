@@ -19,19 +19,9 @@ then
     exit 1
 fi
 
-if [[ ! -f "$PLUGIN_PATH/CmdlinePlugin.py" ]]
+if [[ ! -f "$PLUGIN_PATH/autoload.py" && ! -f "autoload.py" ]]
 then
-    echo -e "[ \e[31m-\e[0m ] CmdlinePlugin.py not found in \e[36m$PLUGIN_PATH\e[0m"
+    echo -e "[ \e[31m-\e[0m ] autoload.py not found in \e[36m$PLUGIN_PATH\e[0m or \e[36m$(pwd)\e[0m"
 fi
 
-java -Xmx1536m -classpath $CP burp.StartBurp --python-home=$JYTHON_PATH/Lib $@ |& while read line
-do
-    echo "$line" | grep Listen > /dev/null
-    if [[ $? -eq 0 ]]
-    then
-        PORT=$(echo "$line" | sed 's/.*://')
-        echo -e "cd $PLUGIN_PATH\nadd CmdlinePlugin\nadd PoCPlugin\ncd $(pwd)\nquit\n" | \
-            nc localhost $PORT
-    fi
-    echo "$line"
-done
+java -Xmx1536m -classpath $CP burp.StartBurp --python-home=$JYTHON_PATH/Lib $@ 
