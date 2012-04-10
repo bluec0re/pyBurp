@@ -15,8 +15,8 @@ Other versions might work, but it isn't guaranteed.
 To use this plugin, you should follow these steps:
 
 #. download and extract/install `jython <www.jython.org>`_ (2.5.2)
-#. update the paths in the *Makefile* for your Burp copy and jython.jar
-    #. run ``make`` (requires a jdk installed, you can also download a
+#. update the paths in the *build.xml* for your Burp copy and jython.jar
+    #. run ``ant`` (requires a jdk installed, you can also download a
            precompiled jar from `here <http://www.ernw.de/download/burp_python.jar>`_)
 #. update the paths in the *burp.sh* corresponding to 2.
 #. start Burp with *burp.sh*
@@ -67,16 +67,4 @@ rm      rm <nr of loaded plugin> unloads a plugin
 cd      cd <absolute path>       change current load path
 pwd     pwd                      prints current load path
 ======= ======================== ===========
-
-Downloads:
-
-- Binary: `burp_python.jar` 
-
-  - SHA1: 500ed30f6473556093f1f388025932c41c262e72 
-  - MD5: 66526190fe6b4d0b149a2918c14336db
-
-- Sourcecode: `pyBurp.tar.gz`
-
-  - SHA1: # 
-  - MD5: #
 
