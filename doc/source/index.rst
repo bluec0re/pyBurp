@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   blogpost.rst
+   quickstart.rst
    examples.rst
 
 Indices and tables
