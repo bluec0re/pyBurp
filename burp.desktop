@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Type=Application
+Name=Burp Suite
+Exec=burp "%f"
+MimeType=application/burp;
+Icon=burp
+X-Desktop-File-Install-Version=0.19
