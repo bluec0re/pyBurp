@@ -16,7 +16,7 @@ To use this plugin, you should follow these steps:
 
 #. download and extract/install `jython <www.jython.org>`_ (2.5.2)
 #. update the paths in the *build.xml* for your Burp copy and jython.jar
-    #. run ``ant`` (requires a jdk installed, you can also download a
+    #. run ``ant`` (requires a jdk with Apache ant installed, you can also download a
            precompiled jar from `here <http://www.ernw.de/download/burp_python.jar>`_)
 #. update the paths in the *burp.sh* corresponding to 2.
 #. start Burp with *burp.sh*
